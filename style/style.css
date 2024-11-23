@@ -132,13 +132,15 @@ span {
     font-size: 27px;
     font-weight: 600;
     margin-left: 25px;
+    padding: 5px 10px; /* musí být i v hover jinak se písmo třepe */
     transition: 0.4s ease;
   }
 
   .menu li a:hover {
     color: var(--secondary-color);
-    padding: 5px 10px;
+    padding: 5px 10px; /* musí být i v hover jinak se písmo třepe */
     border: 2px solid var(--primary-color);
+    border-radius: 5%; /* Zakulacené rohy */
   }
 
   .home {
