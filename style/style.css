@@ -1,7 +1,13 @@
 :root {
   --primary-color: white; /* bílá white */
   --secondary-color: crimson; /* červená crimson */
-  --gradient-color: rgba(0, 0, 0, 0.7);
+  --gradient-color: rgba(0, 0, 0, 0.7); /* rgba(0, 0, 0, 0.7) */
+  --font-size-large-h1: 76px; /*76px*/
+  --font-size-large-nav-title: 67px; /*67px*/
+  --font-size-large-nav: 45px; /*45px*/
+  --font-size-small-nav-title: 40px; /*40px*/
+  --font-size-li-a: 27px; /*27px*/
+  --font-size-p: 20px; /*20px*/
 }
 
 * {
@@ -14,10 +20,11 @@
 .container {
   height: 100vh;
   width: 100%;
+  overflow-x: auto; /* dodá posuvník pro horizontální přetečení pokud bude třeba */
   background: linear-gradient(var(--gradient-color), var(--gradient-color)),
     url(../images/background.webp);
   background-size: cover;
-  background-position: center center;
+  background-position: center;
 }
 
 .nav-bar {
@@ -29,7 +36,7 @@
 
 .nav-bar .title {
   color: var(--primary-color);
-  font-size: 45px;
+  font-size: var(--font-size-large-nav);
   font-weight: 600;
   cursor: pointer;
 }
@@ -43,7 +50,7 @@ span {
   margin-top: 80px;
   margin-left: 10px;
   color: var(--primary-color);
-  font-size: 20px;
+  font-size: var(--font-size-p);
   font-weight: 600;
   cursor: pointer;
 }
@@ -54,6 +61,7 @@ span {
   cursor: pointer;
   border: none;
   background: none;
+  z-index: 15;
 }
 
 .hamburger .bar {
@@ -64,8 +72,48 @@ span {
   transition: transform 0.3s, opacity 0.3s; /* Přidání přechodů pro transformaci a průhlednost */
 }
 
-.menu li {
-  display: none;
+.menu-ham {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  height: 100%;
+  width: 90%;
+  max-width: 500px; /* Maximální šířka 500px */
+  top: 0;
+  right: -100%;
+  background-color: var(--gradient-color); /* Poloprůhledná barva */
+  backdrop-filter: blur(7px); /* Efekt rozmazání */
+  transition: right 0.3s ease;
+  z-index: 5;
+}
+
+.menu-ham li {
+  margin-bottom: clamp(5px, 2.5vw, 20px); /*dynamický margin-bottom min 5px max 20px a mění se podle 2vw*/
+  padding: 10px;
+  /* padding-top: clamp(5px, 2.5vw, 10px) ; */
+  width: 100%; /* Přizpůsobení šířky kontejneru */
+}
+
+.menu-ham li:hover {
+  border: 2px solid white; /* Přidání bílého rámečku */
+}
+
+.menu-ham li a {
+  background-color: transparent; /* bez pozadí */
+  text-decoration: none; /* bez podtržení */
+  color: var(--primary-color);
+  font-size: var(--font-size-li-a);
+  font-weight: 600;
+  padding-left: 10%; /* Přidání odsazení vlevo */
+  display: block; /* Zajišťuje, že odkazy zaberou celou šířku rodičovského kontejneru */
+  width: 100%; /* Zajišťuje, že odkazy zaberou celou šířku rodičovského kontejneru */
+}
+
+.menu-ham li a:hover {
+  color: var(--secondary-color); /* Změna barvy písma při hoveru */
 }
 
 .home {
@@ -78,7 +126,7 @@ span {
 }
 
 .title-1 {
-  font-size: 40px;
+  font-size: var(--font-size-small-nav-title);
   color: var(--primary-color);
   font-weight: 600;
   text-align: center;
@@ -86,7 +134,7 @@ span {
 
 .home p {
   color: var(--primary-color);
-  font-size: 20px;
+  font-size: var(--font-size-p);
   padding-top: 10px;
   text-align: center;
 }
@@ -95,7 +143,7 @@ span {
   height: 40px;
   color: var(--primary-color);
   background: var(--secondary-color);
-  font-size: 22px;
+  font-size: var(--font-size-p);
   padding: 5px 30px;
   margin-top: 20px;
   border: none;
@@ -109,16 +157,56 @@ span {
   border: 2px solid var(--secondary-color);
 }
 
-/* Media queries */
-@media (min-width: 1200px) {
+/* Styl pro aktivní hamburger kde vyjede menu zprava a ikona hamburger se změní na křížek  */
+.menu.active {
+  right: 0;
+}
 
+.hamburger.active .bar:nth-child(1) {
+  transform: rotate(45deg) translate(10px, 10px);
+}
+
+.hamburger.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Media queries pro PC */
+@media (min-width: 1200px) {
   .hamburger {
     display: none;
   }
 
+  .menu-ham {
+    display: none;
+  }
+
+  .menu-ham li a {
+    background-color: transparent;
+  }
+
+  .menu-ham li:hover {
+    border: none; /* odebrání bílého rámečku pro PC jinak by měl 2 rámečky*/
+  }
+
   .nav-bar .title {
-    font-size: 67px;
+    font-size: var(--font-size-large-nav-title);
     font-weight: 600;
+  }
+
+  .menu {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    height: auto;
+    background: none;
+    top: auto;
+    right: auto;
+    transition: none;
   }
 
   .menu li {
@@ -129,7 +217,7 @@ span {
   .menu li a {
     text-decoration: none;
     color: var(--primary-color);
-    font-size: 27px;
+    font-size: var(--font-size-li-a);
     font-weight: 600;
     margin-left: 25px;
     padding: 5px 10px; /* musí být i v hover jinak se písmo třepe */
@@ -150,7 +238,7 @@ span {
   }
 
   .title-1 {
-    font-size: 76px;
+    font-size: var(--font-size-large-h1);
     text-align: left;
   }
 

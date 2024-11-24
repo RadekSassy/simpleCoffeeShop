@@ -1,17 +1,9 @@
-// script.js
+// ham.js - ovládání hamburger menu
 
 const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
-const closeBtn = document.querySelector('.close-btn');
+const menuHam = document.querySelector('.menu-ham');
 
 hamburger.addEventListener('click', () => {
-  navLinks.classList.toggle('active');
-  hamburger.classList.toggle('active'); // Přidáme přepínání třídy pro hamburger tlačítko
-  closeBtn.classList.toggle('show'); // Přepínejte zobrazení tlačítka zavření
-});
-
-closeBtn.addEventListener('click', () => {
-  navLinks.classList.remove('active');
-  hamburger.classList.remove('active'); // Skryjte třídu pro hamburger tlačítko
-  closeBtn.classList.remove('show'); // Skryjte tlačítko zavření při zavření menu
+  menuHam.classList.toggle('active'); // vyjíždění hamburger menu
+  hamburger.classList.toggle('active'); // přepínání třídy pro hamburger tlačítko
 });
