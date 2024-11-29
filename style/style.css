@@ -8,6 +8,7 @@
   --font-size-small-nav-title: 40px; /*40px*/
   --font-size-li-a: 27px; /*27px*/
   --font-size-p: 20px; /*20px*/
+  --font-size-minimum: 12px; /*12px*/
 }
 
 * {
@@ -20,21 +21,29 @@
 .container {
   height: 100vh;
   width: 100%;
-  overflow-x: auto; /* dodá posuvník pro horizontální přetečení pokud bude třeba */
+  overflow: hidden;
   background: linear-gradient(var(--gradient-color), var(--gradient-color)),
     url(../images/background.webp);
   background-size: cover;
   background-position: center;
+  overflow-y: auto; /* Umožní vertikální rolování, pokud obsah přesahuje */
 }
 
-.nav-bar {
+.navbar {
   display: flex;
-  align-items: center;
+  background-color: transparent;
   justify-content: space-between;
-  padding: 30px 80px;
+  padding: 5px 0 10px 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
 }
 
-.nav-bar .title {
+.logo {
+  margin-left: 20px;
+}
+.logo-title {
   color: var(--primary-color);
   font-size: var(--font-size-large-nav);
   font-weight: 600;
@@ -45,10 +54,7 @@ span {
   color: var(--secondary-color);
 }
 
-.nav-bar p {
-  position: absolute;
-  margin-top: 80px;
-  margin-left: 10px;
+.logo-p {
   color: var(--primary-color);
   font-size: var(--font-size-p);
   font-weight: 600;
@@ -61,6 +67,8 @@ span {
   cursor: pointer;
   border: none;
   background: none;
+  margin-right: 20px;
+  align-self: center;
   z-index: 15;
 }
 
@@ -72,89 +80,56 @@ span {
   transition: transform 0.3s, opacity 0.3s; /* Přidání přechodů pro transformaci a průhlednost */
 }
 
-.menu-ham {
+.menu {
   list-style: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: fixed;
   height: 100%;
   width: 90%;
   max-width: 500px; /* Maximální šířka 500px */
   top: 0;
-  right: -100%;
+  right: -100%; /*menu je mimo display*/
   background-color: var(--gradient-color); /* Poloprůhledná barva */
   backdrop-filter: blur(7px); /* Efekt rozmazání */
+  overflow-y: auto; /* Umožní vertikální rolování, pokud obsah přetéká */
   transition: right 0.3s ease;
   z-index: 5;
 }
 
-.menu-ham li {
-  margin-bottom: clamp(5px, 2.5vw, 20px); /*dynamický margin-bottom min 5px max 20px a mění se podle 2vw*/
-  padding: 10px;
-  /* padding-top: clamp(5px, 2.5vw, 10px) ; */
-  width: 100%; /* Přizpůsobení šířky kontejneru */
+.menu li {
+  margin-bottom: 10px;
+  width: 80%; /* Přizpůsobení šířky kontejneru */
 }
 
-.menu-ham li:hover {
-  border: 2px solid white; /* Přidání bílého rámečku */
+.menu li:hover {
+  border: 2px solid var(--primary-color); /* Přidání bílého rámečku */
 }
 
-.menu-ham li a {
+.menu li:first-child {
+  margin-top: 150px;
+}
+
+.menu li a {
   background-color: transparent; /* bez pozadí */
   text-decoration: none; /* bez podtržení */
+  margin: 10px;
+  text-align: center;
   color: var(--primary-color);
   font-size: var(--font-size-li-a);
+  font-size: clamp(var(--font-size-minimum), 4vw, var(--font-size-li-a));
   font-weight: 600;
-  padding-left: 10%; /* Přidání odsazení vlevo */
   display: block; /* Zajišťuje, že odkazy zaberou celou šířku rodičovského kontejneru */
   width: 100%; /* Zajišťuje, že odkazy zaberou celou šířku rodičovského kontejneru */
 }
 
-.menu-ham li a:hover {
+.menu li a:hover {
   color: var(--secondary-color); /* Změna barvy písma při hoveru */
 }
 
-.home {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Horizontální zarovnání na střed */
-  justify-content: center; /* Vertikální zarovnání na střed */
-  text-align: center; /* Zajišťuje, že text uvnitř je zarovnán na střed */
-  height: 100vh; /* Výška divu, může být nastavena podle potřeby */
-}
-
-.title-1 {
-  font-size: var(--font-size-small-nav-title);
-  color: var(--primary-color);
-  font-weight: 600;
-  text-align: center;
-}
-
-.home p {
-  color: var(--primary-color);
-  font-size: var(--font-size-p);
-  padding-top: 10px;
-  text-align: center;
-}
-
-.home button {
-  height: 40px;
-  color: var(--primary-color);
-  background: var(--secondary-color);
-  font-size: var(--font-size-p);
-  padding: 5px 30px;
-  margin-top: 20px;
-  border: none;
-  border-radius: 5px;
-  transition: 0.4s ease;
-  cursor: pointer;
-}
-
-.home button:hover {
-  background: none;
-  border: 2px solid var(--secondary-color);
+.menu.active {
+  right: 0%; /* zajišťuje vyjíždění menu zprava*/
 }
 
 /* Styl pro aktivní hamburger kde vyjede menu zprava a ikona hamburger se změní na křížek  */
@@ -174,80 +149,108 @@ span {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
+section {
+  width: 100%; /* Zajišťuje, že sekce pokrývá celou šířku okna */
+  height: 100vh; /* Zajišťuje, že sekce má výšku celé viditelné oblasti okna */
+  padding: 20px; /* Přidání odsazení kolem obsahu */
+  box-sizing: border-box; /* Zajištění, že padding je zahrnut do celkové šířky a výšky */
+  /* margin-top: 200px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.home {
+  height: 400px;
+  padding: 70px;
+}
+
+.title-1 {
+  font-size: clamp(
+    var(--font-size-small-nav-title),
+    6vw,
+    var(--font-size-large-nav-title)
+  );
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.home p {
+  color: var(--primary-color);
+  font-size: 20px;
+  font-size: clamp(var(--font-size-minimum), 6vw, var(--font-size-p));
+  margin-top: 10px;
+}
+
+/* Media query pro skrytí textu při šířce viewportu menší než 320px */
+@media (max-width: 320px) {
+  .title-1,
+  .home p {
+    display: none; /* Skryje text */
+  }
+}
+
+.home button {
+  white-space: nowrap;
+  height: 40px;
+  color: #fff;
+  background: var(--secondary-color);
+  font-size: var(--font-size-p);
+  padding: 5px 30px;
+  margin-top: 20px;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  transition: 0.4s ease;
+  cursor: pointer;
+}
+
+.home button:hover {
+  background: none;
+  border: 2px solid var(--secondary-color);
+}
+
 /* Media queries pro PC */
 @media (min-width: 1200px) {
   .hamburger {
     display: none;
   }
 
-  .menu-ham {
-    display: none;
-  }
-
-  .menu-ham li a {
-    background-color: transparent;
-  }
-
-  .menu-ham li:hover {
-    border: none; /* odebrání bílého rámečku pro PC jinak by měl 2 rámečky*/
-  }
-
-  .nav-bar .title {
-    font-size: var(--font-size-large-nav-title);
-    font-weight: 600;
-  }
-
   .menu {
-    position: static;
-    display: flex;
+    display: flex; /* Zajistí, že menu je viditelné na velkých obrazovkách */
     flex-direction: row;
-    width: auto;
-    height: auto;
-    background: none;
-    top: auto;
-    right: auto;
-    transition: none;
+    align-items: center;
+    position: static; /* Změna pozice pro normální tok dokumentu */
+    background-color: transparent; /* Změna barvy pozadí */
+    backdrop-filter: none; /* Odstraní rozmazání pozadí */
+    right: auto; /* Resetuje pozici */
+    top: auto; /* Resetuje pozici */
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
   }
-
   .menu li {
-    list-style: none;
-    display: inline-block;
+    margin: 0 10px; /* Horizontální mezery mezi položkami */
+    border: 4px solid transparent; /* Přidání bílého rámečku */
   }
-
   .menu li a {
+    display: block; /* Umožní odkazu zabírat celou šířku položky */
     text-decoration: none;
     color: var(--primary-color);
     font-size: var(--font-size-li-a);
     font-weight: 600;
-    margin-left: 25px;
-    padding: 5px 10px; /* musí být i v hover jinak se písmo třepe */
-    transition: 0.4s ease;
+    padding: 10px 15px; /* Odsazení odkazu */
+    margin: auto;
   }
-
   .menu li a:hover {
     color: var(--secondary-color);
-    padding: 5px 10px; /* musí být i v hover jinak se písmo třepe */
-    border: 2px solid var(--primary-color);
-    border-radius: 5%; /* Zakulacené rohy */
   }
 
-  .home {
-    display: block; /* Zrušíme flexbox stylování */
-    height: 400px; /* Nastavíme novou výšku */
-    padding: 70px; /* Nastavíme nové odsazení */
+  .menu li:hover {
+    border: 4px solid var(--primary-color); /* Přidání bílého rámečku */
+    transition: transform 0.3s, opacity 0.3s;
   }
 
-  .title-1 {
-    font-size: var(--font-size-large-h1);
-    text-align: left;
-  }
-
-  .home p {
-    text-align: left;
-  }
-
-  .home button {
-    display: block; /* Na tlačítku tak zruším flex */
-    margin-left: 0; /* Zarovnáme tlačítko vlevo */
+  .menu li:first-child {
+    margin-top: 0px;
   }
 }
